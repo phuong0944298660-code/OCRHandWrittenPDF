@@ -64,15 +64,12 @@ export function displayValue(field) {
   if (lower === 'checked') return '已勾选'
   if (lower === 'present') return '有内容'
   if (lower === 'missing') return '未发现'
-  if (!hasFieldValue(field)) return '有填写痕迹，OCR 未稳定识别'
-  return value
+  return value || ''
 }
 
 export function fieldConfidenceLabel(field) {
   const confidence = Number(field?.confidence || 0)
-  if (confidence >= 0.8) return '高'
-  if (confidence >= 0.5) return '中'
-  return '低'
+  return `${(confidence * 100).toFixed(0)}%`
 }
 
 export function fieldConfidenceClass(field) {

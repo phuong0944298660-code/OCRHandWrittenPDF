@@ -152,9 +152,12 @@ public class Id988aTemplateExtractor {
         String value = row.value(field.normalizedKey());
         TemplateRect rowValueBox = row.slice(field.valueBox(), rowIndex, rows.size());
         ImageRect rowValueRect = alignment.toImageRect(rowValueBox, page.imageWidth(), page.imageHeight());
-        ExtractedValue extracted = value.isBlank()
-            ? extractBlankWorkingExperienceCell(field, page, pageImage, rowValueRect)
-            : finalizeTextValue(field, page, pageImage, rowValueRect, value, 0.86, "working_experience_table");
+        ExtractedValue cropValue = extractCropTextValue(field, page, pageImage, rowValueRect);
+        ExtractedValue extracted = cropValue != null
+            ? cropValue
+            : value.isBlank()
+                ? extractBlankWorkingExperienceCell(field, page, pageImage, rowValueRect)
+                : finalizeTextValue(field, page, pageImage, rowValueRect, value, 0.86, "working_experience_table");
         extractions.add(toFieldExtraction(
             field,
             indexedWorkingExperienceKey(field.key(), rowIndex),
@@ -329,11 +332,19 @@ public class Id988aTemplateExtractor {
       return extractImagePresence(page, valueRect);
     }
     if ("signature_presence".equals(field.fieldType())) {
+      ExtractedValue cropValue = extractCropTextValue(field, page, pageImage, valueRect);
+      if (cropValue != null) {
+        return cropValue;
+      }
       String signatureText = cleanFieldText(field, extractText(page.blocks(), valueRect));
       if (!signatureText.isBlank()) {
         return finalizeTextValue(field, page, pageImage, valueRect, signatureText, 0.78, "layout_block");
       }
       return extractPresence(page, valueRect);
+    }
+    ExtractedValue cropValue = extractCropTextValue(field, page, pageImage, valueRect);
+    if (cropValue != null) {
+      return cropValue;
     }
     String text = "";
     String rawText = "";
@@ -362,17 +373,49 @@ public class Id988aTemplateExtractor {
       }
       return finalizeTextValue(field, page, pageImage, valueRect, text, 0.86, "layout_block_or_markdown");
     }
-    OcrFieldQuality rawQuality = qualityGate.assess(field, rawText, 0.35);
-    if (rawText != null && !rawText.isBlank() && !rawQuality.accepted()) {
-      ExtractedValue presence = extractPresence(page, valueRect);
-      boolean present = presence.present() || !rawText.isBlank();
-      return new ExtractedValue("", present, present ? 0.35 : 0.0, "layout_block_or_markdown", rawQuality.status(), rawQuality.reasons());
+    if (rawText != null && !rawText.isBlank()) {
+      if (isDateField(field)) {
+        return new ExtractedValue("", false, 0.0, "layout_block_or_markdown", "rejected_garbage", List.of("non_date_raw_text_rejected"));
+      }
+      OcrFieldQuality rawQuality = qualityGate.assess(field, rawText, 0.35);
+      if (!rawQuality.accepted()) {
+        return finalizeRejectedTextValue(field, page, pageImage, valueRect, rawText, rawQuality, "layout_block_or_markdown");
+      }
+      return new ExtractedValue(rawText, true, 0.35, "layout_block_or_markdown", "raw_ocr_text", List.of("returning_uncleaned_raw_text"));
     }
     ExtractedValue presence = extractPresence(page, valueRect);
     if (presence.present()) {
       return new ExtractedValue("", true, 0.42, "visual_presence", "needs_ocr_text", List.of("visible_marks_without_usable_text"));
     }
     return new ExtractedValue("", false, 0.0, "none", "empty", List.of());
+  }
+
+  private ExtractedValue extractCropTextValue(
+      Id988aTemplateField field,
+      OcrPage page,
+      BufferedImage pageImage,
+      ImageRect valueRect
+  ) {
+    FieldCropOcrService.CropOcrResult crop = fieldCropOcrService.recognize(field, pageImage, valueRect);
+    if (!crop.attempted()) {
+      return null;
+    }
+    String cropText = cleanFieldText(field, crop.text());
+    if (cropText.isBlank()) {
+      return null;
+    }
+    OcrFieldQuality quality = qualityGate.assess(field, cropText, Math.max(0.55, crop.confidence()));
+    if (!quality.accepted()) {
+      return null;
+    }
+    return new ExtractedValue(
+        cropText,
+        true,
+        Math.max(0.58, crop.confidence()),
+        crop.source(),
+        "accepted",
+        List.of("field_crop_ocr")
+    );
   }
 
   private ExtractedValue finalizeRejectedTextValue(

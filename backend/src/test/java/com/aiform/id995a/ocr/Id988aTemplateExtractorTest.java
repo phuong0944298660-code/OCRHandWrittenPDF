@@ -8,10 +8,46 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.junit.jupiter.api.Test;
 
 class Id988aTemplateExtractorTest {
+
+  @Test
+  void pageOneValueBoxesMatchCorrectedVisualCalibration() {
+    Map<String, TemplateRect> valueBoxes = new Id988aTemplateRegistry().fields().stream()
+        .filter(field -> field.page() == 1)
+        .collect(Collectors.toMap(Id988aTemplateField::key, Id988aTemplateField::valueBox));
+
+    assertThat(valueBoxes).containsEntry("surnameEn.value", TemplateRect.parse("[0.1587,0.5173,0.8029,0.0346]"));
+    assertThat(valueBoxes).containsEntry("givenNamesEn.value", TemplateRect.parse("[0.1587,0.5575,0.8029,0.0359]"));
+    assertThat(valueBoxes).containsEntry("maidenSurname.value", TemplateRect.parse("[0.1984,0.5977,0.2779,0.0309]"));
+    assertThat(valueBoxes).containsEntry("nameChinese.value", TemplateRect.parse("[0.6572,0.5977,0.3044,0.0309]"));
+    assertThat(valueBoxes).containsEntry("alias.value", TemplateRect.parse("[0.1146,0.6237,0.8470,0.0328]"));
+    assertThat(valueBoxes).containsEntry("sex.male.checked", TemplateRect.parse("[0.0713,0.6658,0.0344,0.0278]"));
+    assertThat(valueBoxes).containsEntry("sex.female.checked", TemplateRect.parse("[0.1896,0.6658,0.0424,0.0278]"));
+    assertThat(valueBoxes).containsEntry("dateOfBirth.value", TemplateRect.parse("[0.3757,0.6651,0.2462,0.0266]"));
+    assertThat(valueBoxes).containsEntry("placeOfBirth.value", TemplateRect.parse("[0.7119,0.6658,0.2541,0.0291]"));
+    assertThat(valueBoxes).containsEntry("maritalStatus.bachelor.checked", TemplateRect.parse("[0.1428,0.7010,0.0388,0.0278]"));
+    assertThat(valueBoxes).containsEntry("maritalStatus.married.checked", TemplateRect.parse("[0.3131,0.7010,0.0397,0.0278]"));
+    assertThat(valueBoxes).containsEntry("maritalStatus.divorced.checked", TemplateRect.parse("[0.4428,0.7010,0.0397,0.0278]"));
+    assertThat(valueBoxes).containsEntry("maritalStatus.separated.checked", TemplateRect.parse("[0.5848,0.7010,0.0397,0.0278]"));
+    assertThat(valueBoxes).containsEntry("maritalStatus.widowed.checked", TemplateRect.parse("[0.7471,0.7010,0.0406,0.0278]"));
+    assertThat(valueBoxes).containsEntry("hkIdentityCard.yes.checked", TemplateRect.parse("[0.2143,0.7276,0.0362,0.0223]"));
+    assertThat(valueBoxes).containsEntry("hkIdentityCard.no.checked", TemplateRect.parse("[0.2143,0.7505,0.0362,0.0223]"));
+    assertThat(valueBoxes).containsEntry("hkIdentityCard.no.value", TemplateRect.parse("[0.3016,0.7313,0.2550,0.0272]"));
+    assertThat(valueBoxes).containsEntry("nationality.value", TemplateRect.parse("[0.6236,0.7326,0.1253,0.0371]"));
+    assertThat(valueBoxes).containsEntry("occupation.value", TemplateRect.parse("[0.7622,0.7326,0.1765,0.0371]"));
+    assertThat(valueBoxes).containsEntry("travelDocument.type.value", TemplateRect.parse("[0.1596,0.7721,0.2091,0.0322]"));
+    assertThat(valueBoxes).containsEntry("travelDocument.no.value", TemplateRect.parse("[0.5187,0.7734,0.3812,0.0303]"));
+    assertThat(valueBoxes).containsEntry("travelDocument.placeOfIssue.value", TemplateRect.parse("[0.1128,0.8031,0.1244,0.0328]"));
+    assertThat(valueBoxes).containsEntry("travelDocument.dateOfIssue.value", TemplateRect.parse("[0.3237,0.8049,0.2488,0.0297]"));
+    assertThat(valueBoxes).containsEntry("travelDocument.dateOfExpiry.value", TemplateRect.parse("[0.6598,0.8049,0.2700,0.0297]"));
+    assertThat(valueBoxes).containsEntry("page1Confirmation.date.value", TemplateRect.parse("[0.4075,0.8768,0.2038,0.0489]"));
+    assertThat(valueBoxes).containsEntry("page1Confirmation.signature.present", TemplateRect.parse("[0.7163,0.8768,0.2470,0.0489]"));
+  }
 
   @Test
   void extractsCheckedApplicationTypeFromTemplateValueBox() {
@@ -65,6 +101,82 @@ class Id988aTemplateExtractorTest {
       assertThat(field.normalizedKey()).isEqualTo("surnameEn");
       assertThat(field.present()).isTrue();
       assertThat(field.value()).isEqualTo("KUSUMA");
+    });
+  }
+
+  @Test
+  void runsFieldCropOcrForAnnotatedTextBoxWhenLayoutHasNoText() throws Exception {
+    FieldCropOcrService cropOcr = (field, pageImage, valueRect) -> {
+      if ("givenNamesEn.value".equals(field.key())) {
+        return new FieldCropOcrService.CropOcrResult("DEWI ANGGRAINI", 0.78, true, "paddle_vl_crop");
+      }
+      return new FieldCropOcrService.CropOcrResult("", 0.0, true, "paddle_vl_crop");
+    };
+    Id988aTemplateExtractor extractor = new Id988aTemplateExtractor(
+        new Id988aTemplateRegistry(),
+        new TemplatePageAligner(),
+        cropOcr,
+        OcrFieldQualityGate.localOnly()
+    );
+    OcrPage page = new OcrPage(
+        1,
+        dataUrl(blankImage(1191, 1684)),
+        1191,
+        1684,
+        "ID 988A Entry to Hong Kong domestic helper",
+        List.of(),
+        List.of(),
+        List.of()
+    );
+
+    List<Id988aFieldExtraction> fields = extractor.extract(List.of(page));
+
+    assertThat(fields).anySatisfy(field -> {
+      assertThat(field.key()).isEqualTo("givenNamesEn.value");
+      assertThat(field.present()).isTrue();
+      assertThat(field.value()).isEqualTo("DEWI ANGGRAINI");
+      assertThat(field.extractionSource()).isEqualTo("paddle_vl_crop");
+      assertThat(field.qualityStatus()).isEqualTo("accepted");
+    });
+  }
+
+  @Test
+  void prefersFieldCropOcrOverBroadLayoutTextForAnnotatedTextBox() throws Exception {
+    FieldCropOcrService cropOcr = (field, pageImage, valueRect) -> {
+      if ("maidenSurname.value".equals(field.key())) {
+        return new FieldCropOcrService.CropOcrResult("WIBOWO", 0.78, true, "paddle_vl_crop");
+      }
+      return new FieldCropOcrService.CropOcrResult("", 0.0, true, "paddle_vl_crop");
+    };
+    Id988aTemplateExtractor extractor = new Id988aTemplateExtractor(
+        new Id988aTemplateRegistry(),
+        new TemplatePageAligner(),
+        cropOcr,
+        OcrFieldQualityGate.localOnly()
+    );
+    OcrPage page = new OcrPage(
+        1,
+        dataUrl(blankImage(1191, 1684)),
+        1191,
+        1684,
+        "ID 988A Entry to Hong Kong domestic helper",
+        List.of(),
+        List.of(new OcrTextBlock(
+            "text",
+            "Maiden surname Name in Chinese Alias $ 1295 garbage",
+            List.of(180, 990, 980, 1090),
+            true
+        )),
+        List.of()
+    );
+
+    List<Id988aFieldExtraction> fields = extractor.extract(List.of(page));
+
+    assertThat(fields).anySatisfy(field -> {
+      assertThat(field.key()).isEqualTo("maidenSurname.value");
+      assertThat(field.present()).isTrue();
+      assertThat(field.value()).isEqualTo("WIBOWO");
+      assertThat(field.extractionSource()).isEqualTo("paddle_vl_crop");
     });
   }
 
@@ -370,6 +482,47 @@ class Id988aTemplateExtractorTest {
   }
 
   @Test
+  void prefersFieldCropOcrForWorkingExperienceAnnotatedCells() throws Exception {
+    FieldCropOcrService cropOcr = (field, pageImage, valueRect) -> {
+      if ("workingExperience.items[].employerName".equals(field.normalizedKey())) {
+        return new FieldCropOcrService.CropOcrResult("Crop Employer", 0.78, true, "paddle_vl_crop");
+      }
+      return new FieldCropOcrService.CropOcrResult("", 0.0, true, "paddle_vl_crop");
+    };
+    Id988aTemplateExtractor extractor = new Id988aTemplateExtractor(
+        new Id988aTemplateRegistry(),
+        new TemplatePageAligner(),
+        cropOcr,
+        OcrFieldQualityGate.localOnly()
+    );
+    String markdown = """
+        ID 988A domestic helper
+        <table>
+          <tr><td>Name of employer(s)</td><td>Address</td><td>From (mm/yy)</td><td>To (mm/yy)</td></tr>
+          <tr><td>Markdown Employer</td><td>Central, Hong Kong</td><td>03/17</td><td>02/21</td></tr>
+        </table>
+        """;
+    OcrPage page = new OcrPage(
+        2,
+        dataUrl(blankImage(992, 1403)),
+        992,
+        1403,
+        markdown,
+        List.of(),
+        List.of(),
+        List.of()
+    );
+
+    List<Id988aFieldExtraction> fields = extractor.extract(List.of(page));
+
+    assertThat(fields).anySatisfy(field -> {
+      assertThat(field.key()).isEqualTo("workingExperience.items[0].employerName.value");
+      assertThat(field.value()).isEqualTo("Crop Employer");
+      assertThat(field.extractionSource()).isEqualTo("paddle_vl_crop");
+    });
+  }
+
+  @Test
   void keepsWorkingExperienceRowsAsVisualItemsWhenMarkdownTableIsGarbage() throws Exception {
     Id988aTemplateExtractor extractor = new Id988aTemplateExtractor(
         new Id988aTemplateRegistry(),
@@ -537,5 +690,14 @@ class Id988aTemplateExtractorTest {
     ByteArrayOutputStream output = new ByteArrayOutputStream();
     ImageIO.write(image, "png", output);
     return "data:image/png;base64," + Base64.getEncoder().encodeToString(output.toByteArray());
+  }
+
+  private BufferedImage blankImage(int width, int height) {
+    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    Graphics2D graphics = image.createGraphics();
+    graphics.setColor(Color.WHITE);
+    graphics.fillRect(0, 0, width, height);
+    graphics.dispose();
+    return image;
   }
 }
