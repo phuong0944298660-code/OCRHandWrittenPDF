@@ -20,8 +20,8 @@ def extract_text_from_rec_response(payload: Any) -> tuple[str, float]:
     confidences: list[float] = []
     _collect_rec_values(payload, texts, confidences)
     deduped = _dedupe(texts)
-    confidence = max(confidences) if confidences else (0.0 if not deduped else 0.80)
-    return " ".join(deduped).strip(), _clamp(confidence)
+    confidence = max(confidences) if confidences else (0.0 if not deduped else 0.42)
+    return " ".join(deduped), _clamp(confidence)
 
 
 def extract_boxes_from_det_response(payload: Any) -> list[list[int]]:
@@ -60,11 +60,14 @@ class PaddleEndpointClient:
         response = self._post_image(self.rec_url, image_bytes)
         return extract_text_from_rec_response(response)
 
+    def _trust_env(self) -> bool:
+        return False
+
     def _post_image(self, url: str, image_bytes: bytes) -> Any:
         import httpx
 
         files = {"file": ("crop.jpg", image_bytes, "image/jpeg")}
-        with httpx.Client(timeout=self.timeout_seconds) as client:
+        with httpx.Client(timeout=self.timeout_seconds, trust_env=self._trust_env()) as client:
             response = client.post(url, files=files)
         response.raise_for_status()
         return response.json()
@@ -117,9 +120,9 @@ def recognize_field(page: PageImage, field: dict[str, Any], model_client: Paddle
         return field_result(field, "present" if present else "missing", present, 0.80 if present else 0.0, bbox, "visual_presence")
     if should_use_detection(field):
         text, confidence = detect_then_recognize(crop, model_client)
-        return field_result(field, text, bool(text), confidence, bbox, "ppocr_det_rec")
+        return field_result(field, text, bool(text.strip()), confidence, bbox, "ppocr_det_rec")
     text, confidence = model_client.recognize(image_to_jpeg_bytes(crop))
-    return field_result(field, text, bool(text), confidence, bbox, "ppocr_rec")
+    return field_result(field, text, bool(text.strip()), confidence, bbox, "ppocr_rec")
 
 
 def detect_then_recognize(image: Any, model_client: PaddleEndpointClient) -> tuple[str, float]:
@@ -134,7 +137,7 @@ def detect_then_recognize(image: Any, model_client: PaddleEndpointClient) -> tup
         if text:
             texts.append(text)
             confidences.append(confidence)
-    return "\n".join(_dedupe(texts)).strip(), _clamp(max(confidences) if confidences else 0.0)
+    return "\n".join(_dedupe(texts)), _clamp(max(confidences) if confidences else 0.0)
 
 
 def render_pages(file_bytes: bytes, dpi: int) -> list[PageImage]:
@@ -228,7 +231,7 @@ def field_result(
 ) -> dict[str, Any]:
     return {
         "key": field.get("key", ""),
-        "value": value.strip() if isinstance(value, str) else "",
+        "value": value if isinstance(value, str) else "",
         "present": bool(present),
         "confidence": _clamp(confidence),
         "bbox": bbox,
@@ -245,21 +248,21 @@ def parse_fields(fields_json: str) -> list[dict[str, Any]]:
 
 def default_model_client() -> PaddleEndpointClient:
     return PaddleEndpointClient(
-        det_url=os.getenv("PP_OCR_DET_URL", "http://localhost:8001/predict"),
-        rec_url=os.getenv("PP_OCR_REC_URL", "http://localhost:8002/predict"),
+        det_url=os.getenv("PP_OCR_DET_URL", "http://192.168.20.250:8001/predict"),
+        rec_url=os.getenv("PP_OCR_REC_URL", "http://192.168.20.250:8002/predict"),
         timeout_seconds=float(os.getenv("PP_OCR_TIMEOUT_SECONDS", "60")),
     )
 
 
 def _collect_rec_values(payload: Any, texts: list[str], confidences: list[float]) -> None:
     if isinstance(payload, str):
-        text = payload.strip()
-        if text:
-            texts.append(text)
+        if payload.strip():
+            texts.append(payload)
         return
     if isinstance(payload, list):
         if payload and isinstance(payload[0], str):
-            texts.append(payload[0].strip())
+            if payload[0].strip():
+                texts.append(payload[0])
             if len(payload) > 1 and isinstance(payload[1], (int, float)):
                 confidences.append(float(payload[1]))
             return
@@ -271,7 +274,7 @@ def _collect_rec_values(payload: Any, texts: list[str], confidences: list[float]
     for key in ("text", "transcription", "rec_text", "label", "value"):
         value = payload.get(key)
         if isinstance(value, str) and value.strip():
-            texts.append(value.strip())
+            texts.append(value)
     for key in ("score", "confidence", "probability", "prob"):
         value = payload.get(key)
         if isinstance(value, (int, float)):
@@ -283,6 +286,8 @@ def _collect_rec_values(payload: Any, texts: list[str], confidences: list[float]
 
 def _collect_boxes(payload: Any, boxes: list[list[int]]) -> None:
     if isinstance(payload, dict):
+        parsed_boxes = _parse_box_list(payload.get("boxes"))
+        boxes.extend(parsed_boxes)
         for key in ("bbox", "box", "rect"):
             parsed = _parse_bbox(payload.get(key))
             if parsed:
@@ -296,6 +301,10 @@ def _collect_boxes(payload: Any, boxes: list[list[int]]) -> None:
                 _collect_boxes(value, boxes)
         return
     if isinstance(payload, list):
+        parsed = _parse_points(payload)
+        if parsed:
+            boxes.append(parsed)
+            return
         for item in payload:
             _collect_boxes(item, boxes)
 
@@ -324,6 +333,17 @@ def _parse_points(value: Any) -> list[int] | None:
     return [round(min(xs)), round(min(ys)), round(max(xs)), round(max(ys))]
 
 
+def _parse_box_list(value: Any) -> list[list[int]]:
+    if not isinstance(value, list):
+        return []
+    parsed: list[list[int]] = []
+    for item in value:
+        box = _parse_bbox(item) or _parse_points(item)
+        if box:
+            parsed.append(box)
+    return parsed
+
+
 def _dedupe(values: Iterable[str]) -> list[str]:
     result: list[str] = []
     seen = set()
@@ -331,7 +351,7 @@ def _dedupe(values: Iterable[str]) -> list[str]:
         normalized = " ".join(str(value).split())
         if normalized and normalized not in seen:
             seen.add(normalized)
-            result.append(normalized)
+            result.append(str(value))
     return result
 
 

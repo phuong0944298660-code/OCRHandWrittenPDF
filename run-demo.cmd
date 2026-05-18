@@ -24,7 +24,7 @@ echo   - RAG Service    (Python) : http://127.0.0.1:8090
 echo   - OCR Service    (Python) : http://127.0.0.1:8091
 echo   - Backend (Java + OCR)   : http://127.0.0.1:8080
 echo   - Frontend (Vue)         : http://127.0.0.1:5173
-echo   - PP-OCR det/rec models  : http://127.0.0.1:8001 / http://127.0.0.1:8002
+echo   - PP-OCR det/rec models  : http://192.168.20.250:8001 / http://192.168.20.250:8002
 echo.
 
 REM Check backend jar exists

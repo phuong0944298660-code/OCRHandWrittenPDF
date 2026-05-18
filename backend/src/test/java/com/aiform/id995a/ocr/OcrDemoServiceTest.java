@@ -27,7 +27,7 @@ class OcrDemoServiceTest {
           List.of(new FieldOcrPage(1, 1191, 1684, "data:image/jpeg;base64,page")),
           List.of(new FieldOcrResult(
               "surnameEn.value",
-              "KUSUMA",
+              " KUSUMA ",
               true,
               0.91,
               List.of(189, 871, 1145, 929),
@@ -65,7 +65,7 @@ class OcrDemoServiceTest {
     assertThat(response.pages()).hasSize(1);
     assertThat(response.extractedFields()).anySatisfy(field -> {
       assertThat(field.key()).isEqualTo("surnameEn.value");
-      assertThat(field.value()).isEqualTo("KUSUMA");
+      assertThat(field.value()).isEqualTo(" KUSUMA ");
       assertThat(field.present()).isTrue();
       assertThat(field.confidence()).isEqualTo(0.91);
       assertThat(field.extractionSource()).isEqualTo("ppocr_rec");

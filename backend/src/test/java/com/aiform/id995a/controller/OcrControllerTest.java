@@ -8,10 +8,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.aiform.id995a.ocr.FieldOcrClient;
 import com.aiform.id995a.ocr.FieldOcrPage;
+import com.aiform.id995a.ocr.FieldOcrRequest;
 import com.aiform.id995a.ocr.FieldOcrResponse;
 import com.aiform.id995a.ocr.FieldOcrResult;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,6 +38,14 @@ class OcrControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
+
+  @Autowired
+  private ConfigurableFieldOcrClient fieldOcrClient;
+
+  @BeforeEach
+  void resetFakeClient() {
+    fieldOcrClient.reset();
+  }
 
   @Test
   void uploadsDocumentAndReturnsSplitScreenOcrPayload() throws Exception {
@@ -58,12 +70,52 @@ class OcrControllerTest {
         .andExpect(jsonPath("$.extractedFields[4].extractionSource", equalTo("ppocr_rec")));
   }
 
+  @Test
+  void returnsBadGatewayWhenFieldOcrServiceFails() throws Exception {
+    fieldOcrClient.failWith(new IOException(
+        "Python OCR service returned HTTP 502: {\"detail\":\"PP-OCRv5 endpoint unavailable: http://127.0.0.1:8002/predict\"}"
+    ));
+    MockMultipartFile file = new MockMultipartFile(
+        "file",
+        "id988a.pdf",
+        "application/pdf",
+        "%PDF-1.7".getBytes(StandardCharsets.UTF_8)
+    );
+
+    mockMvc.perform(multipart("/api/ocr").file(file))
+        .andExpect(status().isBadGateway())
+        .andExpect(jsonPath("$.status", equalTo(502)))
+        .andExpect(jsonPath("$.message", startsWith("OCR service unavailable")))
+        .andExpect(jsonPath("$.message", startsWith("OCR service unavailable: Python OCR service returned HTTP 502")));
+  }
+
   @TestConfiguration
   static class FakeFieldOcrConfig {
     @Bean
     @Primary
-    FieldOcrClient fakeFieldOcrClient() {
-      return request -> new FieldOcrResponse(
+    ConfigurableFieldOcrClient fakeFieldOcrClient() {
+      return new ConfigurableFieldOcrClient();
+    }
+  }
+
+  static class ConfigurableFieldOcrClient implements FieldOcrClient {
+    private final AtomicReference<IOException> failure = new AtomicReference<>();
+
+    void reset() {
+      failure.set(null);
+    }
+
+    void failWith(IOException exception) {
+      failure.set(exception);
+    }
+
+    @Override
+    public FieldOcrResponse recognize(FieldOcrRequest request) throws IOException {
+      IOException exception = failure.get();
+      if (exception != null) {
+        throw exception;
+      }
+      return new FieldOcrResponse(
           request.taskId(),
           request.templateId(),
           1,

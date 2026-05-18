@@ -71,4 +71,43 @@ class OcrFieldQualityGateTest {
     assertThat(quality.status()).isEqualTo("rejected_garbage");
     assertThat(quality.reasons()).contains("unsupported_script_noise");
   }
+
+  @Test
+  void rejectsCjkNoiseInLatinAndDateFields() {
+    OcrFieldQualityGate gate = OcrFieldQualityGate.localOnly();
+    Id988aTemplateField surname = new Id988aTemplateField(
+        "personalParticulars",
+        "2. Personal Particulars",
+        1,
+        "surnameEn.value",
+        "Surname in English",
+        "text_cells",
+        "surnameEn",
+        "",
+        "[0,0,1,1]",
+        "[0,0,1,1]"
+    );
+    Id988aTemplateField date = new Id988aTemplateField(
+        "personalParticulars",
+        "2. Personal Particulars",
+        1,
+        "dateOfBirth.value",
+        "Date of birth",
+        "date_cells",
+        "dateOfBirth",
+        "dd/mm/yyyy",
+        "[0,0,1,1]",
+        "[0,0,1,1]"
+    );
+
+    OcrFieldQuality surnameQuality = gate.assess(surname, "妧", 0.42);
+    OcrFieldQuality dateQuality = gate.assess(date, "犬亏攻犬", 0.42);
+
+    assertThat(surnameQuality.accepted()).isFalse();
+    assertThat(surnameQuality.status()).isEqualTo("rejected_garbage");
+    assertThat(surnameQuality.reasons()).contains("latin_field_contains_cjk_noise");
+    assertThat(dateQuality.accepted()).isFalse();
+    assertThat(dateQuality.status()).isEqualTo("rejected_garbage");
+    assertThat(dateQuality.reasons()).contains("latin_field_contains_cjk_noise", "date_field_without_digits");
+  }
 }

@@ -82,6 +82,11 @@ test('displayValue distinguishes checked, visible marks, and empty low-confidenc
   assert.equal(displayValue({ value: '', present: true }), '有填写痕迹，OCR 未稳定识别')
 })
 
+test('displayValue returns handwritten OCR text verbatim', () => {
+  assert.equal(displayValue({ value: ' KUSUMA/DEWI ', present: true }), ' KUSUMA/DEWI ')
+  assert.equal(displayValue({ value: '妧', present: true }), '妧')
+})
+
 test('hasFieldValue rejects explanation-only values', () => {
   assert.equal(hasFieldValue({ value: '(if applicable)', present: true }), false)
   assert.equal(hasFieldValue({ value: 'KUSUMA', present: true }), true)

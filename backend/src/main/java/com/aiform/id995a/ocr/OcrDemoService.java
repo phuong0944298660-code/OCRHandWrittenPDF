@@ -92,7 +92,7 @@ public class OcrDemoService {
       FieldOcrPage page,
       FieldOcrResult result
   ) {
-    String rawValue = result == null || result.value() == null ? "" : result.value().trim();
+    String rawValue = result == null || result.value() == null ? "" : result.value();
     double confidence = result == null ? 0.0 : clamp(result.confidence());
     boolean present = result != null && (result.present() || !rawValue.isBlank());
     String value = rawValue;

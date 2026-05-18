@@ -22,8 +22,8 @@ services:
     ports:
       - "8091:8091"
     environment:
-      - PP_OCR_DET_URL=${PP_OCR_DET_URL:-http://host.docker.internal:8001/predict}
-      - PP_OCR_REC_URL=${PP_OCR_REC_URL:-http://host.docker.internal:8002/predict}
+      - PP_OCR_DET_URL=${PP_OCR_DET_URL:-http://192.168.20.250:8001/predict}
+      - PP_OCR_REC_URL=${PP_OCR_REC_URL:-http://192.168.20.250:8002/predict}
       - PP_OCR_TIMEOUT_SECONDS=${PP_OCR_TIMEOUT_SECONDS:-60}
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8091/health')"]

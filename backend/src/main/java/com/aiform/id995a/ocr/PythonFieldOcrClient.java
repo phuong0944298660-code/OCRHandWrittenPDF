@@ -29,13 +29,17 @@ public class PythonFieldOcrClient implements FieldOcrClient {
     this.objectMapper = objectMapper;
     this.baseUrl = stripTrailingSlash(baseUrl);
     this.timeout = Duration.ofSeconds(timeoutSeconds);
-    this.httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
+    this.httpClient = HttpClient.newBuilder()
+        .version(HttpClient.Version.HTTP_1_1)
+        .connectTimeout(Duration.ofSeconds(10))
+        .build();
   }
 
   @Override
   public FieldOcrResponse recognize(FieldOcrRequest request) throws IOException {
     String boundary = "----id995a-field-ocr-" + UUID.randomUUID();
     HttpRequest httpRequest = HttpRequest.newBuilder(URI.create(baseUrl + "/ocr/recognize"))
+        .version(HttpClient.Version.HTTP_1_1)
         .timeout(timeout)
         .header("Content-Type", "multipart/form-data; boundary=" + boundary)
         .POST(HttpRequest.BodyPublishers.ofByteArray(multipartBody(request, boundary)))
@@ -59,7 +63,7 @@ public class PythonFieldOcrClient implements FieldOcrClient {
     ByteArrayOutputStream output = new ByteArrayOutputStream();
     writeTextPart(output, boundary, "task_id", request.taskId());
     writeTextPart(output, boundary, "template_id", request.templateId());
-    writeJsonPart(output, boundary, "fields", objectMapper.writeValueAsString(request.fields()));
+    writeTextPart(output, boundary, "fields", objectMapper.writeValueAsString(request.fields()));
     writeFilePart(output, boundary, request);
     write(output, "--" + boundary + "--\r\n");
     return output.toByteArray();
@@ -69,14 +73,6 @@ public class PythonFieldOcrClient implements FieldOcrClient {
     write(output, "--" + boundary + "\r\n");
     write(output, "Content-Disposition: form-data; name=\"" + name + "\"\r\n\r\n");
     write(output, value == null ? "" : value);
-    write(output, "\r\n");
-  }
-
-  private void writeJsonPart(ByteArrayOutputStream output, String boundary, String name, String json) throws IOException {
-    write(output, "--" + boundary + "\r\n");
-    write(output, "Content-Disposition: form-data; name=\"" + name + "\"\r\n");
-    write(output, "Content-Type: application/json; charset=utf-8\r\n\r\n");
-    write(output, json == null ? "[]" : json);
     write(output, "\r\n");
   }
 
@@ -94,7 +90,22 @@ public class PythonFieldOcrClient implements FieldOcrClient {
 
   private String escapeFilename(String filename) {
     String value = filename == null || filename.isBlank() ? "uploaded-document.pdf" : filename;
-    return value.replace("\\", "_").replace("\"", "_").replace("\r", "_").replace("\n", "_");
+    StringBuilder sanitized = new StringBuilder();
+    for (int index = 0; index < value.length(); index++) {
+      char character = value.charAt(index);
+      if ((character >= 'a' && character <= 'z')
+          || (character >= 'A' && character <= 'Z')
+          || (character >= '0' && character <= '9')
+          || character == '.'
+          || character == '-'
+          || character == '_') {
+        sanitized.append(character);
+      } else {
+        sanitized.append('_');
+      }
+    }
+    String result = sanitized.toString();
+    return result.isBlank() ? "uploaded-document.pdf" : result;
   }
 
   private String stripTrailingSlash(String value) {

@@ -12,6 +12,8 @@ public class OcrFieldQualityGate {
   private static final Pattern LOC_TOKEN = Pattern.compile("<LOC_\\d+>|LOC_\\d+", Pattern.CASE_INSENSITIVE);
   private static final Pattern REPLACEMENT_NOISE = Pattern.compile("�|锟");
   private static final Pattern KANA_OR_HANGUL = Pattern.compile("[\\u3040-\\u30ff\\uac00-\\ud7af]");
+  private static final Pattern CJK = Pattern.compile("[\\u3400-\\u9fff]");
+  private static final Pattern LATIN_OR_DIGIT = Pattern.compile("[A-Za-z0-9]");
   private static final Pattern SYMBOL_NOISE = Pattern.compile("[{}<>|`^~\\\\]");
   private static final Pattern DIGIT = Pattern.compile("\\d");
   private static final Pattern UNSUPPORTED_SCRIPT = Pattern.compile(
@@ -93,6 +95,12 @@ public class OcrFieldQualityGate {
     if (hasUnsupportedScriptNoise(text)) {
       reasons.add("unsupported_script_noise");
     }
+    if (hasUnexpectedCjkForLatinField(field, text)) {
+      reasons.add("latin_field_contains_cjk_noise");
+    }
+    if (isDateField(field) && digitCount(text) == 0) {
+      reasons.add("date_field_without_digits");
+    }
     if (hasUnlikelyDigitDensity(field, text)) {
       reasons.add("unlikely_digit_density");
     }
@@ -112,6 +120,8 @@ public class OcrFieldQualityGate {
     String status = reasons.contains("cross_field_label_leakage")
         || reasons.contains("generated_multilingual_noise")
         || reasons.contains("unsupported_script_noise")
+        || reasons.contains("latin_field_contains_cjk_noise")
+        || reasons.contains("date_field_without_digits")
         || reasons.contains("symbol_noise")
         ? "rejected_garbage"
         : "needs_review";
@@ -145,6 +155,29 @@ public class OcrFieldQualityGate {
   private boolean hasUnsupportedScriptNoise(String text) {
     return UNSUPPORTED_SCRIPT.matcher(text).find()
         || (KANA_OR_HANGUL.matcher(text).find() && text.length() > 20);
+  }
+
+  private boolean hasUnexpectedCjkForLatinField(Id988aTemplateField field, String text) {
+    if (!expectsLatinLikeValue(field) || !CJK.matcher(text).find()) {
+      return false;
+    }
+    int latinOrDigit = (int) LATIN_OR_DIGIT.matcher(text).results().count();
+    int cjk = (int) CJK.matcher(text).results().count();
+    return cjk > 0 && latinOrDigit < Math.max(2, cjk);
+  }
+
+  private boolean expectsLatinLikeValue(Id988aTemplateField field) {
+    if ("nameChinese".equals(field.normalizedKey())) {
+      return false;
+    }
+    if (isDateField(field)) {
+      return true;
+    }
+    return switch (field.fieldType()) {
+      case "text", "text_cells", "date_cells", "date_or_text", "multiline_text",
+          "repeatable_text", "repeatable_date_month", "number_cells" -> true;
+      default -> false;
+    };
   }
 
   private boolean hasUnlikelyDigitDensity(Id988aTemplateField field, String text) {

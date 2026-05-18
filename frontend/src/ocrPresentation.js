@@ -59,11 +59,12 @@ export function hasFieldValue(field) {
 }
 
 export function displayValue(field) {
-  const value = normalizeFieldValue(field?.value || '')
-  const lower = value.toLowerCase()
+  const value = String(field?.value ?? '')
+  const lower = value.trim().toLowerCase()
   if (lower === 'checked') return '已勾选'
   if (lower === 'present') return '有内容'
   if (lower === 'missing') return '未发现'
+  if (!value.trim() && field?.present) return '\u6709\u586b\u5199\u75d5\u8ff9\uff0cOCR \u672a\u7a33\u5b9a\u8bc6\u522b'
   return value || ''
 }
 

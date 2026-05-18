@@ -21,7 +21,19 @@ public class OcrController {
   }
 
   @PostMapping(value = "/ocr", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public OcrDemoResponse recognize(@RequestPart("file") MultipartFile file) throws IOException {
-    return ocrDemoService.recognize(file.getOriginalFilename(), file.getContentType(), file.getBytes());
+  public OcrDemoResponse recognize(@RequestPart("file") MultipartFile file) {
+    try {
+      return ocrDemoService.recognize(file.getOriginalFilename(), file.getContentType(), file.getBytes());
+    } catch (IOException exception) {
+      throw new OcrApiException("OCR service unavailable: " + trimMessage(exception.getMessage()), exception);
+    }
+  }
+
+  private String trimMessage(String message) {
+    if (message == null || message.isBlank()) {
+      return "unknown error";
+    }
+    String compact = message.replace('\r', ' ').replace('\n', ' ').trim();
+    return compact.length() > 600 ? compact.substring(0, 600) + "..." : compact;
   }
 }

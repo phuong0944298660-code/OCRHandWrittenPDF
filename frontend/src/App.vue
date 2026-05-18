@@ -118,7 +118,8 @@ async function submitOcr() {
     body.append('file', file.value)
     const result = await fetch(`${apiBase}/api/ocr`, { method: 'POST', body })
     if (!result.ok) {
-      throw new Error(`HTTP ${result.status}`)
+      const message = await readErrorMessage(result)
+      throw new Error(message || `HTTP ${result.status}`)
     }
     response.value = await result.json()
     activePage.value = response.value?.pages?.[0]?.page || 1
@@ -166,6 +167,17 @@ function summarizeDataUrl(value) {
   if (!value) return ''
   if (value.startsWith('data:')) return `${value.slice(0, 56)}...`
   return value
+}
+
+async function readErrorMessage(result) {
+  const text = await result.text()
+  if (!text) return ''
+  try {
+    const payload = JSON.parse(text)
+    return payload.message || payload.detail || payload.error || text
+  } catch {
+    return text
+  }
 }
 </script>
 
