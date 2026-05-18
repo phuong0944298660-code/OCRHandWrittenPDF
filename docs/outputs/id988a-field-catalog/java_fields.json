@@ -1,0 +1,1244 @@
+[
+  {
+    "page": 1,
+    "key": "applicationType.entryFromAbroad.entryVisa.checked",
+    "label": "来港受雇为外籍家庭佣工 + 入境签证是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0406,
+      0.2895,
+      0.7966,
+      0.0357
+    ],
+    "valueBox": [
+      0.7414,
+      0.3033,
+      0.0183,
+      0.0107
+    ]
+  },
+  {
+    "page": 1,
+    "key": "applicationType.contractRenewal.entryVisa.checked",
+    "label": "与同一雇主续约或转换雇主：返原居地度假 + 入境签证是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0406,
+      0.3296,
+      0.9252,
+      0.1168
+    ],
+    "valueBox": [
+      0.7414,
+      0.38,
+      0.0183,
+      0.0107
+    ]
+  },
+  {
+    "page": 1,
+    "key": "applicationType.contractRenewal.entryVisaAndExtension.checked",
+    "label": "与同一雇主续约或转换雇主：押后返回原居地度假 + 入境签证及延期逗留是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0406,
+      0.3296,
+      0.9252,
+      0.1168
+    ],
+    "valueBox": [
+      0.7414,
+      0.4201,
+      0.0183,
+      0.0107
+    ]
+  },
+  {
+    "page": 1,
+    "key": "applicationType.completeRemainingPeriod.extensionOfStay.checked",
+    "label": "完成现有合约剩余/延长期限 + 延期逗留是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0381,
+      0.4482,
+      0.8394,
+      0.0348
+    ],
+    "valueBox": [
+      0.7414,
+      0.4611,
+      0.0183,
+      0.0107
+    ]
+  },
+  {
+    "page": 1,
+    "key": "surnameEn.value",
+    "label": "姓（英文）Surname in English",
+    "fieldType": "text_cells",
+    "groupBox": [
+      0.028,
+      0.5151,
+      0.9428,
+      0.0374
+    ],
+    "valueBox": [
+      0.1754,
+      0.5249,
+      0.7815,
+      0.0196
+    ]
+  },
+  {
+    "page": 1,
+    "key": "givenNamesEn.value",
+    "label": "名（英文）Given names in English",
+    "fieldType": "text_cells",
+    "groupBox": [
+      0.0255,
+      0.557,
+      0.9491,
+      0.0348
+    ],
+    "valueBox": [
+      0.1754,
+      0.5655,
+      0.7815,
+      0.0192
+    ]
+  },
+  {
+    "page": 1,
+    "key": "maidenSurname.value",
+    "label": "婚前姓氏（如适用）Maiden surname",
+    "fieldType": "text",
+    "groupBox": [
+      0.0166,
+      0.5936,
+      0.4853,
+      0.0348
+    ],
+    "valueBox": [
+      0.212,
+      0.598,
+      0.2836,
+      0.0267
+    ]
+  },
+  {
+    "page": 1,
+    "key": "nameChinese.value",
+    "label": "姓名（中文）（如适用）Name in Chinese",
+    "fieldType": "text",
+    "groupBox": [
+      0.5019,
+      0.5936,
+      0.484,
+      0.0348
+    ],
+    "valueBox": [
+      0.6771,
+      0.5971,
+      0.2792,
+      0.0285
+    ]
+  },
+  {
+    "page": 1,
+    "key": "alias.value",
+    "label": "别名（如有）Alias",
+    "fieldType": "text",
+    "groupBox": [
+      0.0242,
+      0.6283,
+      0.9617,
+      0.033
+    ],
+    "valueBox": [
+      0.1263,
+      0.6337,
+      0.8262,
+      0.0241
+    ]
+  },
+  {
+    "page": 1,
+    "key": "sex.male.checked",
+    "label": "性别：男 Male 是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0204,
+      0.6631,
+      0.2634,
+      0.0339
+    ],
+    "valueBox": [
+      0.105,
+      0.66,
+      0.04,
+      0.035
+    ]
+  },
+  {
+    "page": 1,
+    "key": "sex.female.checked",
+    "label": "性别：女 Female 是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0204,
+      0.6631,
+      0.2634,
+      0.0339
+    ],
+    "valueBox": [
+      0.22,
+      0.66,
+      0.045,
+      0.035
+    ]
+  },
+  {
+    "page": 1,
+    "key": "dateOfBirth.value",
+    "label": "出生日期 Date of birth",
+    "fieldType": "date_cells",
+    "groupBox": [
+      0.2901,
+      0.6631,
+      0.3517,
+      0.0339
+    ],
+    "valueBox": [
+      0.38,
+      0.6627,
+      0.26,
+      0.0201
+    ]
+  },
+  {
+    "page": 1,
+    "key": "placeOfBirth.value",
+    "label": "出生地点 Place of birth",
+    "fieldType": "text",
+    "groupBox": [
+      0.6456,
+      0.6631,
+      0.3264,
+      0.0339
+    ],
+    "valueBox": [
+      0.7288,
+      0.6667,
+      0.2275,
+      0.0267
+    ]
+  },
+  {
+    "page": 1,
+    "key": "maritalStatus.bachelor.checked",
+    "label": "婚姻状况：未婚 Bachelor/Spinster 是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0179,
+      0.7006,
+      0.8445,
+      0.0312
+    ],
+    "valueBox": [
+      0.181,
+      0.694,
+      0.045,
+      0.035
+    ]
+  },
+  {
+    "page": 1,
+    "key": "maritalStatus.married.checked",
+    "label": "婚姻状况：已婚 Married 是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0179,
+      0.7006,
+      0.8445,
+      0.0312
+    ],
+    "valueBox": [
+      0.33,
+      0.694,
+      0.045,
+      0.035
+    ]
+  },
+  {
+    "page": 1,
+    "key": "maritalStatus.divorced.checked",
+    "label": "婚姻状况：离婚 Divorced 是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0179,
+      0.7006,
+      0.8445,
+      0.0312
+    ],
+    "valueBox": [
+      0.452,
+      0.694,
+      0.045,
+      0.035
+    ]
+  },
+  {
+    "page": 1,
+    "key": "maritalStatus.separated.checked",
+    "label": "婚姻状况：分居 Separated 是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0179,
+      0.7006,
+      0.8445,
+      0.0312
+    ],
+    "valueBox": [
+      0.587,
+      0.694,
+      0.045,
+      0.035
+    ]
+  },
+  {
+    "page": 1,
+    "key": "maritalStatus.widowed.checked",
+    "label": "婚姻状况：丧偶 Widowed 是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0179,
+      0.7006,
+      0.8445,
+      0.0312
+    ],
+    "valueBox": [
+      0.742,
+      0.694,
+      0.045,
+      0.035
+    ]
+  },
+  {
+    "page": 1,
+    "key": "hkIdentityCard.yes.checked",
+    "label": "香港身份证号码：有 Yes 是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0179,
+      0.7327,
+      0.5609,
+      0.0437
+    ],
+    "valueBox": [
+      0.248,
+      0.721,
+      0.03,
+      0.02
+    ]
+  },
+  {
+    "page": 1,
+    "key": "hkIdentityCard.no.checked",
+    "label": "香港身份证号码：没有 No 是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0179,
+      0.7327,
+      0.5609,
+      0.0437
+    ],
+    "valueBox": [
+      0.248,
+      0.745,
+      0.03,
+      0.02
+    ]
+  },
+  {
+    "page": 1,
+    "key": "hkIdentityCard.no.value",
+    "label": "香港身份证号码 HK identity card no.",
+    "fieldType": "text_cells",
+    "groupBox": [
+      0.0179,
+      0.7327,
+      0.5609,
+      0.0437
+    ],
+    "valueBox": [
+      0.3311,
+      0.7362,
+      0.2244,
+      0.0147
+    ]
+  },
+  {
+    "page": 1,
+    "key": "nationality.value",
+    "label": "国籍 Nationality",
+    "fieldType": "text",
+    "groupBox": [
+      0.58,
+      0.7344,
+      0.1966,
+      0.0401
+    ],
+    "valueBox": [
+      0.6475,
+      0.7407,
+      0.1242,
+      0.0263
+    ]
+  },
+  {
+    "page": 1,
+    "key": "occupation.value",
+    "label": "职业 Occupation",
+    "fieldType": "text",
+    "groupBox": [
+      0.7767,
+      0.7344,
+      0.2017,
+      0.0401
+    ],
+    "valueBox": [
+      0.8454,
+      0.742,
+      0.1115,
+      0.0263
+    ]
+  },
+  {
+    "page": 1,
+    "key": "travelDocument.type.value",
+    "label": "旅行证件类别 Travel document type",
+    "fieldType": "text",
+    "groupBox": [
+      0.0179,
+      0.7772,
+      0.3668,
+      0.0303
+    ],
+    "valueBox": [
+      0.1647,
+      0.7826,
+      0.2124,
+      0.0205
+    ]
+  },
+  {
+    "page": 1,
+    "key": "travelDocument.no.value",
+    "label": "旅行证件号码 Travel document no.",
+    "fieldType": "text_cells",
+    "groupBox": [
+      0.3847,
+      0.7772,
+      0.5508,
+      0.0303
+    ],
+    "valueBox": [
+      0.5498,
+      0.7812,
+      0.358,
+      0.0192
+    ]
+  },
+  {
+    "page": 1,
+    "key": "travelDocument.placeOfIssue.value",
+    "label": "签发地点 Place of issue",
+    "fieldType": "text",
+    "groupBox": [
+      0.0141,
+      0.8076,
+      0.2344,
+      0.0357
+    ],
+    "valueBox": [
+      0.15,
+      0.8165,
+      0.1197,
+      0.0192
+    ]
+  },
+  {
+    "page": 1,
+    "key": "travelDocument.dateOfIssue.value",
+    "label": "签发日期 Date of issue",
+    "fieldType": "date_cells",
+    "groupBox": [
+      0.2536,
+      0.8076,
+      0.3252,
+      0.0357
+    ],
+    "valueBox": [
+      0.32,
+      0.8129,
+      0.24,
+      0.0192
+    ]
+  },
+  {
+    "page": 1,
+    "key": "travelDocument.dateOfExpiry.value",
+    "label": "期满日期 Date of expiry",
+    "fieldType": "date_cells",
+    "groupBox": [
+      0.5838,
+      0.8076,
+      0.3643,
+      0.0357
+    ],
+    "valueBox": [
+      0.6884,
+      0.8125,
+      0.2294,
+      0.0196
+    ]
+  },
+  {
+    "page": 2,
+    "key": "presentAddress.value",
+    "label": "现时住址 Present address",
+    "fieldType": "multiline_text",
+    "groupBox": [
+      0.0329,
+      0.0703,
+      0.7014,
+      0.1071
+    ],
+    "valueBox": [
+      0.302,
+      0.0798,
+      0.4037,
+      0.0869
+    ]
+  },
+  {
+    "page": 2,
+    "key": "domicileAddress.value",
+    "label": "居籍地址（如与上述不同）Domicile address",
+    "fieldType": "multiline_text",
+    "groupBox": [
+      0.0178,
+      0.1798,
+      0.7165,
+      0.1071
+    ],
+    "valueBox": [
+      0.302,
+      0.1887,
+      0.4037,
+      0.0935
+    ]
+  },
+  {
+    "page": 2,
+    "key": "photograph.present",
+    "label": "照片 Photograph 是否粘贴",
+    "fieldType": "image_presence",
+    "groupBox": [
+      0.7343,
+      0.0703,
+      0.2405,
+      0.219
+    ],
+    "valueBox": [
+      0.7343,
+      0.0703,
+      0.2405,
+      0.219
+    ]
+  },
+  {
+    "page": 2,
+    "key": "contactTelephone.no.value",
+    "label": "联系电话 Contact telephone no.",
+    "fieldType": "text_cells",
+    "groupBox": [
+      0.0262,
+      0.2929,
+      0.4844,
+      0.0393
+    ],
+    "valueBox": [
+      0.171,
+      0.3,
+      0.335,
+      0.03
+    ]
+  },
+  {
+    "page": 2,
+    "key": "contactTelephone.ext.value",
+    "label": "内线 Ext.",
+    "fieldType": "text_cells",
+    "groupBox": [
+      0.0262,
+      0.2929,
+      0.4844,
+      0.0393
+    ],
+    "valueBox": [
+      0.4055,
+      0.3054,
+      0.0942,
+      0.0196
+    ]
+  },
+  {
+    "page": 2,
+    "key": "faxNo.value",
+    "label": "传真号码 Fax no.",
+    "fieldType": "text_cells",
+    "groupBox": [
+      0.551,
+      0.2929,
+      0.3313,
+      0.0393
+    ],
+    "valueBox": [
+      0.6401,
+      0.3054,
+      0.1892,
+      0.0196
+    ]
+  },
+  {
+    "page": 2,
+    "key": "email.value",
+    "label": "电邮地址 E-mail address",
+    "fieldType": "text_cells",
+    "groupBox": [
+      0.0262,
+      0.3345,
+      0.8864,
+      0.0369
+    ],
+    "valueBox": [
+      0.191,
+      0.3459,
+      0.7056,
+      0.019
+    ]
+  },
+  {
+    "page": 2,
+    "key": "currentEmployer.name.value",
+    "label": "现时雇主姓名 Name of current employer",
+    "fieldType": "text",
+    "groupBox": [
+      0.0228,
+      0.3762,
+      0.9503,
+      0.0357
+    ],
+    "valueBox": [
+      0.2869,
+      0.3816,
+      0.6644,
+      0.0262
+    ]
+  },
+  {
+    "page": 2,
+    "key": "currentEmployer.address.value",
+    "label": "现时雇主地址 Address of current employer",
+    "fieldType": "text",
+    "groupBox": [
+      0.0195,
+      0.4149,
+      0.9537,
+      0.0423
+    ],
+    "valueBox": [
+      0.2886,
+      0.4238,
+      0.6627,
+      0.0262
+    ]
+  },
+  {
+    "page": 2,
+    "key": "workingExperience.items[].employerName.value",
+    "label": "工作经验表：雇主名称 Name of employer(s)",
+    "fieldType": "repeatable_text",
+    "groupBox": [
+      0.0514,
+      0.57,
+      0.2439,
+      0.2277
+    ],
+    "valueBox": [
+      0.0581,
+      0.585,
+      0.2304,
+      0.195
+    ]
+  },
+  {
+    "page": 2,
+    "key": "workingExperience.items[].address.value",
+    "label": "工作经验表：地址 Address",
+    "fieldType": "repeatable_text",
+    "groupBox": [
+      0.2987,
+      0.57,
+      0.3583,
+      0.2196
+    ],
+    "valueBox": [
+      0.3054,
+      0.585,
+      0.3448,
+      0.195
+    ]
+  },
+  {
+    "page": 2,
+    "key": "workingExperience.items[].periodFrom.value",
+    "label": "工作经验表：由 From (mm/yy)",
+    "fieldType": "repeatable_date_month",
+    "groupBox": [
+      0.662,
+      0.57,
+      0.1455,
+      0.2191
+    ],
+    "valueBox": [
+      0.6687,
+      0.585,
+      0.1371,
+      0.195
+    ]
+  },
+  {
+    "page": 2,
+    "key": "workingExperience.items[].periodTo.value",
+    "label": "工作经验表：至 To (mm/yy)",
+    "fieldType": "repeatable_date_month",
+    "groupBox": [
+      0.8075,
+      0.57,
+      0.1472,
+      0.2191
+    ],
+    "valueBox": [
+      0.8083,
+      0.585,
+      0.1396,
+      0.195
+    ]
+  },
+  {
+    "page": 2,
+    "key": "workingExperience.totalYears.value",
+    "label": "总工作经验：年 Year(s)",
+    "fieldType": "number_cells",
+    "groupBox": [
+      0.0296,
+      0.8107,
+      0.6358,
+      0.0381
+    ],
+    "valueBox": [
+      0.395,
+      0.772,
+      0.06,
+      0.065
+    ]
+  },
+  {
+    "page": 2,
+    "key": "workingExperience.totalMonths.value",
+    "label": "总工作经验：月 Month(s)",
+    "fieldType": "number_cells",
+    "groupBox": [
+      0.0296,
+      0.8107,
+      0.6358,
+      0.0381
+    ],
+    "valueBox": [
+      0.535,
+      0.772,
+      0.06,
+      0.065
+    ]
+  },
+  {
+    "page": 3,
+    "key": "currentStatus.employment.checked",
+    "label": "现时在港逗留身份：雇佣工作 Employment 是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0525,
+      0.0983,
+      0.4296,
+      0.0822
+    ],
+    "valueBox": [
+      0.0761,
+      0.1156,
+      0.0185,
+      0.0131
+    ]
+  },
+  {
+    "page": 3,
+    "key": "currentStatus.others.checked",
+    "label": "现时在港逗留身份：其他 Others 是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0525,
+      0.0983,
+      0.4296,
+      0.0822
+    ],
+    "valueBox": [
+      0.0761,
+      0.1555,
+      0.0185,
+      0.0131
+    ]
+  },
+  {
+    "page": 3,
+    "key": "currentStatus.othersDetail.value",
+    "label": "其他身份说明 Others (Please specify)",
+    "fieldType": "text",
+    "groupBox": [
+      0.0525,
+      0.0983,
+      0.4296,
+      0.0822
+    ],
+    "valueBox": [
+      0.2757,
+      0.1388,
+      0.1937,
+      0.025
+    ]
+  },
+  {
+    "page": 3,
+    "key": "currentStatus.remainUntil.value",
+    "label": "现时获准在港逗留至 Currently permitted to remain until",
+    "fieldType": "date_cells",
+    "groupBox": [
+      0.4922,
+      0.109,
+      0.4296,
+      0.0643
+    ],
+    "valueBox": [
+      0.58,
+      0.1233,
+      0.25,
+      0.0191
+    ]
+  },
+  {
+    "page": 3,
+    "key": "extensionPurpose.deferHomeLeave.checked",
+    "label": "申请目的：押后返回原居地度假是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0205,
+      0.1924,
+      0.9283,
+      0.1299
+    ],
+    "valueBox": [
+      0.0415,
+      0.2037,
+      0.0177,
+      0.0125
+    ]
+  },
+  {
+    "page": 3,
+    "key": "extensionPurpose.deferHomeLeave.untilDate.value",
+    "label": "押后返回原居地度假：申请延期至日期",
+    "fieldType": "date_or_text",
+    "groupBox": [
+      0.0205,
+      0.1924,
+      0.9283,
+      0.1299
+    ],
+    "valueBox": [
+      0.1965,
+      0.2472,
+      0.5164,
+      0.0697
+    ]
+  },
+  {
+    "page": 3,
+    "key": "extensionPurpose.completeExistingContract.checked",
+    "label": "申请目的：完成现有合约剩余/延长期限是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0087,
+      0.3247,
+      0.9333,
+      0.0822
+    ],
+    "valueBox": [
+      0.0415,
+      0.3348,
+      0.0185,
+      0.0119
+    ]
+  },
+  {
+    "page": 3,
+    "key": "extensionPurpose.completeExistingContract.untilDate.value",
+    "label": "完成现有合约剩余/延长期限：申请延期至日期",
+    "fieldType": "date_or_text",
+    "groupBox": [
+      0.0087,
+      0.3247,
+      0.9333,
+      0.0822
+    ],
+    "valueBox": [
+      0.2403,
+      0.3681,
+      0.2232,
+      0.0322
+    ]
+  },
+  {
+    "page": 3,
+    "key": "declaration.nameChange.never.checked",
+    "label": "声明 (i)(a)：从未更改姓名是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0238,
+      0.4402,
+      0.9367,
+      0.118
+    ],
+    "valueBox": [
+      0.075,
+      0.4825,
+      0.0185,
+      0.0131
+    ]
+  },
+  {
+    "page": 3,
+    "key": "declaration.nameChange.usedBefore.checked",
+    "label": "声明 (i)(a)：曾用姓名是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0238,
+      0.4402,
+      0.9367,
+      0.118
+    ],
+    "valueBox": [
+      0.075,
+      0.5129,
+      0.0185,
+      0.0131
+    ]
+  },
+  {
+    "page": 3,
+    "key": "declaration.nameChange.previousNames.value",
+    "label": "声明 (i)(a)：曾用姓名详情",
+    "fieldType": "text",
+    "groupBox": [
+      0.0238,
+      0.4402,
+      0.9367,
+      0.118
+    ],
+    "valueBox": [
+      0.1241,
+      0.5391,
+      0.8238,
+      0.0125
+    ]
+  },
+  {
+    "page": 3,
+    "key": "declaration.refusal.never.checked",
+    "label": "声明 (i)(b)：从未被拒签/拒绝入境/遣返等是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0339,
+      0.5582,
+      0.9266,
+      0.1013
+    ],
+    "valueBox": [
+      0.075,
+      0.5635,
+      0.0185,
+      0.0131
+    ]
+  },
+  {
+    "page": 3,
+    "key": "declaration.refusal.previously.checked",
+    "label": "声明 (i)(b)：曾被拒签/拒绝入境/遣返等是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0339,
+      0.5582,
+      0.9266,
+      0.1013
+    ],
+    "valueBox": [
+      0.075,
+      0.6041,
+      0.0185,
+      0.0131
+    ]
+  },
+  {
+    "page": 3,
+    "key": "declaration.refusal.details.value",
+    "label": "声明 (i)(b)：拒签/拒绝入境/遣返详情",
+    "fieldType": "multiline_text",
+    "groupBox": [
+      0.0339,
+      0.5582,
+      0.9266,
+      0.1013
+    ],
+    "valueBox": [
+      0.1241,
+      0.641,
+      0.8238,
+      0.0125
+    ]
+  },
+  {
+    "page": 3,
+    "key": "declaration.conviction.never.checked",
+    "label": "声明 (i)(c)：从未犯罪或违法被定罪是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0339,
+      0.6607,
+      0.9266,
+      0.1144
+    ],
+    "valueBox": [
+      0.075,
+      0.6964,
+      0.0185,
+      0.0131
+    ]
+  },
+  {
+    "page": 3,
+    "key": "declaration.conviction.previously.checked",
+    "label": "声明 (i)(c)：曾犯罪或违法被定罪是否勾选",
+    "fieldType": "checkbox",
+    "groupBox": [
+      0.0339,
+      0.6607,
+      0.9266,
+      0.1144
+    ],
+    "valueBox": [
+      0.075,
+      0.7268,
+      0.0185,
+      0.0131
+    ]
+  },
+  {
+    "page": 3,
+    "key": "declaration.conviction.details.value",
+    "label": "声明 (i)(c)：犯罪或违法定罪详情",
+    "fieldType": "multiline_text",
+    "groupBox": [
+      0.0339,
+      0.6607,
+      0.9266,
+      0.1144
+    ],
+    "valueBox": [
+      0.1241,
+      0.753,
+      0.8238,
+      0.0125
+    ]
+  },
+  {
+    "page": 4,
+    "key": "undertaking.contractNo.value",
+    "label": "承诺 (i)：雇佣合约号码 D.H. Contract No.",
+    "fieldType": "text",
+    "groupBox": [
+      0.0424,
+      0.1353,
+      0.9104,
+      0.124
+    ],
+    "valueBox": [
+      0.12,
+      0.238,
+      0.305,
+      0.035
+    ]
+  },
+  {
+    "page": 4,
+    "key": "undertaking.date.value",
+    "label": "承诺日期 Date",
+    "fieldType": "date_or_text",
+    "groupBox": [
+      0.0154,
+      0.797,
+      0.971,
+      0.0656
+    ],
+    "valueBox": [
+      0.1,
+      0.795,
+      0.37,
+      0.075
+    ]
+  },
+  {
+    "page": 4,
+    "key": "undertaking.signature.present",
+    "label": "申请人签署 Signature of applicant",
+    "fieldType": "signature_presence",
+    "groupBox": [
+      0.0154,
+      0.797,
+      0.971,
+      0.0656
+    ],
+    "valueBox": [
+      0.575,
+      0.795,
+      0.39,
+      0.075
+    ]
+  },
+  {
+    "page": 1,
+    "key": "page1Confirmation.date.value",
+    "label": "第 1 页页底确认日期 Date",
+    "fieldType": "date_or_text",
+    "groupBox": [
+      0.3834,
+      0.8923,
+      0.5861,
+      0.0383
+    ],
+    "valueBox": [
+      0.43,
+      0.858,
+      0.19,
+      0.075
+    ]
+  },
+  {
+    "page": 1,
+    "key": "page1Confirmation.signature.present",
+    "label": "第 1 页页底申请人签署 Signature of applicant",
+    "fieldType": "signature_presence",
+    "groupBox": [
+      0.3834,
+      0.8923,
+      0.5861,
+      0.0383
+    ],
+    "valueBox": [
+      0.735,
+      0.858,
+      0.235,
+      0.075
+    ]
+  },
+  {
+    "page": 2,
+    "key": "page2Confirmation.date.value",
+    "label": "第 2 页页底确认日期 Date",
+    "fieldType": "date_or_text",
+    "groupBox": [
+      0.3861,
+      0.8524,
+      0.5887,
+      0.0762
+    ],
+    "valueBox": [
+      0.44,
+      0.868,
+      0.16,
+      0.07
+    ]
+  },
+  {
+    "page": 2,
+    "key": "page2Confirmation.signature.present",
+    "label": "第 2 页页底申请人签署 Signature of applicant",
+    "fieldType": "signature_presence",
+    "groupBox": [
+      0.3861,
+      0.8524,
+      0.5887,
+      0.0762
+    ],
+    "valueBox": [
+      0.72,
+      0.868,
+      0.25,
+      0.07
+    ]
+  },
+  {
+    "page": 3,
+    "key": "page3Confirmation.date.value",
+    "label": "第 3 页页底确认日期 Date",
+    "fieldType": "date_or_text",
+    "groupBox": [
+      0.3641,
+      0.8561,
+      0.6099,
+      0.0751
+    ],
+    "valueBox": [
+      0.43,
+      0.863,
+      0.19,
+      0.07
+    ]
+  },
+  {
+    "page": 3,
+    "key": "page3Confirmation.signature.present",
+    "label": "第 3 页页底申请人签署 Signature of applicant",
+    "fieldType": "signature_presence",
+    "groupBox": [
+      0.3641,
+      0.8561,
+      0.6099,
+      0.0751
+    ],
+    "valueBox": [
+      0.72,
+      0.863,
+      0.25,
+      0.07
+    ]
+  }
+]

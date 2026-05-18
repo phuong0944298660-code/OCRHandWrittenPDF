@@ -46,6 +46,7 @@ export function fieldsForPage(fields = [], page) {
 }
 
 export function shouldShowField(field) {
+  if (field?.roiImageDataUrl) return true
   if (!field?.present) return false
   if (String(field.value || '').toLowerCase() === 'unchecked') return false
   if (!hasFieldValue(field) && field.confidence < 0.4) return false
@@ -62,6 +63,7 @@ export function displayValue(field) {
   const value = String(field?.value ?? '')
   const lower = value.trim().toLowerCase()
   if (lower === 'checked') return '已勾选'
+  if (lower === 'unchecked') return '未勾选'
   if (lower === 'present') return '有内容'
   if (lower === 'missing') return '未发现'
   if (!value.trim() && field?.present) return '\u6709\u586b\u5199\u75d5\u8ff9\uff0cOCR \u672a\u7a33\u5b9a\u8bc6\u522b'

@@ -19,7 +19,7 @@ echo   - RAG Service    : http://localhost:8090
 echo   - OCR Service    : http://localhost:8091
 echo   - Backend (Java) : http://localhost:8080/api/health
 echo   - Frontend (Vue) : http://localhost:5173
-echo   - PP-OCR det/rec: http://192.168.20.250:8001 / http://192.168.20.250:8002
+echo   - PP-OCR det/rec: local models\PP-OCRv5_server_*_infer
 echo.
 
 docker-compose up --build -d

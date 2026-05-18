@@ -126,7 +126,8 @@ class OcrControllerTest {
               true,
               0.91,
               List.of(189, 871, 1145, 929),
-              "ppocr_rec"
+              "ppocr_rec",
+              "data:image/jpeg;base64,roi"
           ))
       );
     }

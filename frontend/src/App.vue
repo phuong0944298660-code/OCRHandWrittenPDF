@@ -53,6 +53,10 @@ const jsonPreview = computed(() => {
     pages: response.value.pages.map((page) => ({
       ...page,
       sourceImageDataUrl: summarizeDataUrl(page.sourceImageDataUrl)
+    })),
+    extractedFields: (response.value.extractedFields || []).map((field) => ({
+      ...field,
+      roiImageDataUrl: summarizeDataUrl(field.roiImageDataUrl)
     }))
   }
   return JSON.stringify(compact, null, 2)
@@ -322,9 +326,19 @@ async function readErrorMessage(result) {
                     <strong>{{ field.label }}</strong>
                     <span>{{ field.key }}</span>
                   </div>
+                  <div class="field-roi">
+                    <img v-if="field.roiImageDataUrl" :src="field.roiImageDataUrl" alt="" />
+                    <span v-else>无 ROI</span>
+                  </div>
                   <div class="field-value">
                     <strong>{{ displayValue(field) }}</strong>
                     <span v-if="field.option">{{ field.option }}</span>
+                    <span
+                      class="review-state"
+                      :class="{ 'review-state-warning': field.needsHumanReview }"
+                    >
+                      {{ field.needsHumanReview ? '需人工确认' : '自动通过' }}
+                    </span>
                   </div>
                   <div class="field-confidence" :class="fieldConfidenceClass(field)">
                     {{ fieldConfidenceLabel(field) }}

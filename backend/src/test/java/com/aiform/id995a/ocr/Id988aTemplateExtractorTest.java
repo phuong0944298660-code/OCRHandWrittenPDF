@@ -26,17 +26,17 @@ class Id988aTemplateExtractorTest {
     assertThat(valueBoxes).containsEntry("maidenSurname.value", TemplateRect.parse("[0.1984,0.5977,0.2779,0.0309]"));
     assertThat(valueBoxes).containsEntry("nameChinese.value", TemplateRect.parse("[0.6572,0.5977,0.3044,0.0309]"));
     assertThat(valueBoxes).containsEntry("alias.value", TemplateRect.parse("[0.1146,0.6237,0.8470,0.0328]"));
-    assertThat(valueBoxes).containsEntry("sex.male.checked", TemplateRect.parse("[0.0713,0.6658,0.0344,0.0278]"));
-    assertThat(valueBoxes).containsEntry("sex.female.checked", TemplateRect.parse("[0.1896,0.6658,0.0424,0.0278]"));
+    assertThat(valueBoxes).containsEntry("sex.male.checked", TemplateRect.parse("[0.1050,0.6600,0.0400,0.0350]"));
+    assertThat(valueBoxes).containsEntry("sex.female.checked", TemplateRect.parse("[0.2200,0.6600,0.0450,0.0350]"));
     assertThat(valueBoxes).containsEntry("dateOfBirth.value", TemplateRect.parse("[0.3757,0.6651,0.2462,0.0266]"));
     assertThat(valueBoxes).containsEntry("placeOfBirth.value", TemplateRect.parse("[0.7119,0.6658,0.2541,0.0291]"));
-    assertThat(valueBoxes).containsEntry("maritalStatus.bachelor.checked", TemplateRect.parse("[0.1428,0.7010,0.0388,0.0278]"));
-    assertThat(valueBoxes).containsEntry("maritalStatus.married.checked", TemplateRect.parse("[0.3131,0.7010,0.0397,0.0278]"));
-    assertThat(valueBoxes).containsEntry("maritalStatus.divorced.checked", TemplateRect.parse("[0.4428,0.7010,0.0397,0.0278]"));
-    assertThat(valueBoxes).containsEntry("maritalStatus.separated.checked", TemplateRect.parse("[0.5848,0.7010,0.0397,0.0278]"));
-    assertThat(valueBoxes).containsEntry("maritalStatus.widowed.checked", TemplateRect.parse("[0.7471,0.7010,0.0406,0.0278]"));
-    assertThat(valueBoxes).containsEntry("hkIdentityCard.yes.checked", TemplateRect.parse("[0.2143,0.7276,0.0362,0.0223]"));
-    assertThat(valueBoxes).containsEntry("hkIdentityCard.no.checked", TemplateRect.parse("[0.2143,0.7505,0.0362,0.0223]"));
+    assertThat(valueBoxes).containsEntry("maritalStatus.bachelor.checked", TemplateRect.parse("[0.1810,0.6940,0.0450,0.0350]"));
+    assertThat(valueBoxes).containsEntry("maritalStatus.married.checked", TemplateRect.parse("[0.3300,0.6940,0.0450,0.0350]"));
+    assertThat(valueBoxes).containsEntry("maritalStatus.divorced.checked", TemplateRect.parse("[0.4520,0.6940,0.0450,0.0350]"));
+    assertThat(valueBoxes).containsEntry("maritalStatus.separated.checked", TemplateRect.parse("[0.5870,0.6940,0.0450,0.0350]"));
+    assertThat(valueBoxes).containsEntry("maritalStatus.widowed.checked", TemplateRect.parse("[0.7420,0.6940,0.0450,0.0350]"));
+    assertThat(valueBoxes).containsEntry("hkIdentityCard.yes.checked", TemplateRect.parse("[0.2480,0.7210,0.0300,0.0200]"));
+    assertThat(valueBoxes).containsEntry("hkIdentityCard.no.checked", TemplateRect.parse("[0.2480,0.7450,0.0300,0.0200]"));
     assertThat(valueBoxes).containsEntry("hkIdentityCard.no.value", TemplateRect.parse("[0.3016,0.7313,0.2550,0.0272]"));
     assertThat(valueBoxes).containsEntry("nationality.value", TemplateRect.parse("[0.6236,0.7326,0.1253,0.0371]"));
     assertThat(valueBoxes).containsEntry("occupation.value", TemplateRect.parse("[0.7622,0.7326,0.1765,0.0371]"));
@@ -45,8 +45,8 @@ class Id988aTemplateExtractorTest {
     assertThat(valueBoxes).containsEntry("travelDocument.placeOfIssue.value", TemplateRect.parse("[0.1128,0.8031,0.1244,0.0328]"));
     assertThat(valueBoxes).containsEntry("travelDocument.dateOfIssue.value", TemplateRect.parse("[0.3237,0.8049,0.2488,0.0297]"));
     assertThat(valueBoxes).containsEntry("travelDocument.dateOfExpiry.value", TemplateRect.parse("[0.6598,0.8049,0.2700,0.0297]"));
-    assertThat(valueBoxes).containsEntry("page1Confirmation.date.value", TemplateRect.parse("[0.4075,0.8768,0.2038,0.0489]"));
-    assertThat(valueBoxes).containsEntry("page1Confirmation.signature.present", TemplateRect.parse("[0.7163,0.8768,0.2470,0.0489]"));
+    assertThat(valueBoxes).containsEntry("page1Confirmation.date.value", TemplateRect.parse("[0.4300,0.8580,0.1900,0.0750]"));
+    assertThat(valueBoxes).containsEntry("page1Confirmation.signature.present", TemplateRect.parse("[0.7350,0.8580,0.2350,0.0750]"));
   }
 
   @Test

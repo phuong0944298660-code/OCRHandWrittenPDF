@@ -7,6 +7,7 @@ import com.sun.net.httpserver.HttpServer;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +34,7 @@ class PythonFieldOcrClientTest {
               {"page": 1, "image_width": 1191, "image_height": 1684, "source_image_data_url": "data:image/jpeg;base64,page"}
             ],
             "fields": [
-              {"key": "surnameEn.value", "value": "KUSUMA", "present": true, "confidence": 0.91, "bbox": [1,2,3,4], "source": "ppocr_rec"}
+              {"key": "surnameEn.value", "value": "KUSUMA", "present": true, "confidence": 0.91, "bbox": [1,2,3,4], "source": "ppocr_rec", "roi_image_data_url": "data:image/jpeg;base64,roi"}
             ]
           }
           """.getBytes(StandardCharsets.UTF_8);
@@ -55,7 +56,8 @@ class PythonFieldOcrClientTest {
           "application/pdf",
           "%PDF".getBytes(StandardCharsets.UTF_8),
           "id988a",
-          List.of(FieldOcrTemplateField.fromTemplateField(new Id988aTemplateRegistry().fields().get(4)))
+          List.of(FieldOcrTemplateField.fromTemplateField(new Id988aTemplateRegistry().fields().get(4))),
+          Map.of("render_dpi", 300)
       ));
 
       assertThat(contentType.get()).contains("multipart/form-data");
@@ -68,11 +70,14 @@ class PythonFieldOcrClientTest {
       assertThat(requestBody.get()).contains("name=\"fields\"");
       assertThat(requestBody.get()).contains("surnameEn.value");
       assertThat(requestBody.get()).contains("\"value_box\"");
+      assertThat(requestBody.get()).contains("name=\"ocr_params\"");
+      assertThat(requestBody.get()).contains("\"render_dpi\":300");
       assertThat(requestBody.get()).contains("filename=\"___-A__.pdf\"");
       assertThat(requestBody.get()).doesNotContain("何嘉萱");
       assertThat(requestBody.get()).contains("%PDF");
       assertThat(response.fields()).hasSize(1);
       assertThat(response.fields().get(0).value()).isEqualTo("KUSUMA");
+      assertThat(response.fields().get(0).roiImageDataUrl()).isEqualTo("data:image/jpeg;base64,roi");
     } finally {
       server.stop(0);
     }

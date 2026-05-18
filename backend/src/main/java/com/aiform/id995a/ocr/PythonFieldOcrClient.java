@@ -9,6 +9,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Map;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -64,6 +65,7 @@ public class PythonFieldOcrClient implements FieldOcrClient {
     writeTextPart(output, boundary, "task_id", request.taskId());
     writeTextPart(output, boundary, "template_id", request.templateId());
     writeTextPart(output, boundary, "fields", objectMapper.writeValueAsString(request.fields()));
+    writeTextPart(output, boundary, "ocr_params", objectMapper.writeValueAsString(request.ocrParams() == null ? Map.of() : request.ocrParams()));
     writeFilePart(output, boundary, request);
     write(output, "--" + boundary + "--\r\n");
     return output.toByteArray();

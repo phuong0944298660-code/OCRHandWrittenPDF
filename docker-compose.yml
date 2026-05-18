@@ -21,10 +21,15 @@ services:
     container_name: id988a-field-ocr
     ports:
       - "8091:8091"
+    volumes:
+      - ./models:/app/models:ro
     environment:
-      - PP_OCR_DET_URL=${PP_OCR_DET_URL:-http://192.168.20.250:8001/predict}
-      - PP_OCR_REC_URL=${PP_OCR_REC_URL:-http://192.168.20.250:8002/predict}
-      - PP_OCR_TIMEOUT_SECONDS=${PP_OCR_TIMEOUT_SECONDS:-60}
+      - PP_OCR_DET_MODEL_DIR=/app/models/PP-OCRv5_server_det_infer
+      - PP_OCR_REC_MODEL_DIR=/app/models/PP-OCRv5_server_rec_infer
+      - PP_OCR_DEVICE=${PP_OCR_DEVICE:-cpu}
+      - PP_OCR_CPU_THREADS=${PP_OCR_CPU_THREADS:-4}
+      - OCR_RENDER_DPI=${OCR_RENDER_DPI:-300}
+      - PADDLE_PDX_CACHE_HOME=/app/.paddlex_cache
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8091/health')"]
       interval: 10s
@@ -48,6 +53,7 @@ services:
       - LLM_ENABLED=false
       - FIELD_OCR_BASE_URL=http://ocr-service:8091
       - FIELD_OCR_TIMEOUT_SECONDS=300
+      - FIELD_OCR_RENDER_DPI=300
       - OCR_TASKS_DIR=/app/uploads/ocr-tasks
     depends_on:
       rag-service:

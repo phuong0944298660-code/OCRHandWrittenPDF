@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,17 +19,20 @@ public class OcrDemoService {
   private final Id988aTemplateRegistry templateRegistry;
   private final OcrTaskStorage taskStorage;
   private final OcrFieldQualityGate qualityGate;
+  private final int renderDpi;
 
   public OcrDemoService(
       FieldOcrClient fieldOcrClient,
       Id988aTemplateRegistry templateRegistry,
       OcrTaskStorage taskStorage,
-      OcrFieldQualityGate qualityGate
+      OcrFieldQualityGate qualityGate,
+      @Value("${ocr.field-service.render-dpi:300}") int renderDpi
   ) {
     this.fieldOcrClient = fieldOcrClient;
     this.templateRegistry = templateRegistry;
     this.taskStorage = taskStorage;
     this.qualityGate = qualityGate;
+    this.renderDpi = renderDpi;
   }
 
   public OcrDemoResponse recognize(String filename, String contentType, byte[] fileBytes) throws IOException {
@@ -41,7 +45,8 @@ public class OcrDemoService {
         TEMPLATE_ID,
         templateRegistry.fields().stream()
             .map(FieldOcrTemplateField::fromTemplateField)
-            .toList()
+            .toList(),
+        Map.of("render_dpi", renderDpi)
     ));
     return toDemoResponse(task.filename(), fieldResponse);
   }
@@ -94,10 +99,13 @@ public class OcrDemoService {
   ) {
     String rawValue = result == null || result.value() == null ? "" : result.value();
     double confidence = result == null ? 0.0 : clamp(result.confidence());
-    boolean present = result != null && (result.present() || !rawValue.isBlank());
+    boolean rawPresent = result != null && result.present();
+    boolean present = result != null && (rawPresent || !rawValue.isBlank());
     String value = rawValue;
     if ("checkbox".equals(field.fieldType())) {
-      boolean checked = rawValue.equalsIgnoreCase("checked") || rawValue.equalsIgnoreCase("true") || present;
+      boolean checked = rawValue.equalsIgnoreCase("checked")
+          || rawValue.equalsIgnoreCase("true")
+          || (rawValue.isBlank() && rawPresent);
       value = checked ? "checked" : "unchecked";
       present = checked;
       confidence = confidence == 0.0 ? 0.70 : confidence;
@@ -130,7 +138,9 @@ public class OcrDemoService {
         valueBbox,
         result == null || result.source() == null || result.source().isBlank() ? "python_field_ocr" : result.source(),
         quality.status(),
-        quality.reasons()
+        quality.reasons(),
+        result == null || result.roiImageDataUrl() == null ? "" : result.roiImageDataUrl(),
+        needsHumanReview(quality.status())
     );
   }
 
@@ -185,5 +195,9 @@ public class OcrDemoService {
       return 0.0;
     }
     return Math.max(0.0, Math.min(1.0, confidence));
+  }
+
+  private boolean needsHumanReview(String qualityStatus) {
+    return !"accepted".equals(qualityStatus) && !"empty".equals(qualityStatus);
   }
 }

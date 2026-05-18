@@ -78,6 +78,7 @@ test('fieldsForPage groups extracted fields by page and hides unchecked/empty fi
 
 test('displayValue distinguishes checked, visible marks, and empty low-confidence text', () => {
   assert.equal(displayValue({ value: 'checked', present: true }), '已勾选')
+  assert.equal(displayValue({ value: 'unchecked', present: false }), '未勾选')
   assert.equal(displayValue({ value: 'present', present: true }), '有内容')
   assert.equal(displayValue({ value: '', present: true }), '有填写痕迹，OCR 未稳定识别')
 })

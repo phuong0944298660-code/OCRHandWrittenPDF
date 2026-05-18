@@ -110,4 +110,49 @@ class OcrFieldQualityGateTest {
     assertThat(dateQuality.status()).isEqualTo("rejected_garbage");
     assertThat(dateQuality.reasons()).contains("latin_field_contains_cjk_noise", "date_field_without_digits");
   }
+
+  @Test
+  void routesLowConfidenceHandwritingToHumanReview() {
+    OcrFieldQualityGate gate = OcrFieldQualityGate.localOnly();
+    Id988aTemplateField field = new Id988aTemplateField(
+        "personalParticulars",
+        "2. Personal Particulars",
+        1,
+        "occupation.value",
+        "Occupation",
+        "multiline_text",
+        "occupation",
+        "",
+        "[0,0,1,1]",
+        "[0,0,1,1]"
+    );
+
+    OcrFieldQuality quality = gate.assess(field, "Domestic Helper", 0.43);
+
+    assertThat(quality.accepted()).isFalse();
+    assertThat(quality.status()).isEqualTo("needs_review");
+    assertThat(quality.reasons()).contains("low_confidence");
+  }
+
+  @Test
+  void acceptsPipeSeparatedWorkingExperienceEntries() {
+    OcrFieldQualityGate gate = OcrFieldQualityGate.localOnly();
+    Id988aTemplateField field = new Id988aTemplateField(
+        "workingExperience",
+        "3. Working Experience",
+        2,
+        "workingExperience.items[].employerName.value",
+        "Name of employer(s)",
+        "repeatable_text",
+        "workingExperience.items[].employerName",
+        "",
+        "[0,0,1,1]",
+        "[0,0,1,1]"
+    );
+
+    OcrFieldQuality quality = gate.assess(field, "Mrs. Aisha AL-KHALI|Mr. Mohammad RASHID", 0.82);
+
+    assertThat(quality.accepted()).isTrue();
+    assertThat(quality.status()).isEqualTo("accepted");
+  }
 }

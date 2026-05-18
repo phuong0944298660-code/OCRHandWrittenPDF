@@ -269,7 +269,9 @@ public class Id988aTemplateExtractor {
         valueRect.toBbox(),
         value.source(),
         value.qualityStatus(),
-        value.qualityReasons()
+        value.qualityReasons(),
+        "",
+        !"accepted".equals(value.qualityStatus()) && !"empty".equals(value.qualityStatus())
     );
   }
 
@@ -675,15 +677,18 @@ public class Id988aTemplateExtractor {
     List<ImageRect> valueRects = itemFields.stream()
         .map(field -> alignment.toImageRect(field.valueBox(), page.imageWidth(), page.imageHeight()))
         .toList();
-    ImageRect unionRect = unionImageRect(valueRects);
+    List<ImageRect> groupRects = itemFields.stream()
+        .map(field -> alignment.toImageRect(field.groupBox(), page.imageWidth(), page.imageHeight()))
+        .toList();
+    ImageRect unionRect = unionImageRect(groupRects);
     if (unionRect.height() <= 0 || unionRect.width() <= 0) {
       return List.of();
     }
 
     int[] density = new int[unionRect.height()];
     for (ImageRect rect : valueRects) {
-      int startY = Math.max(rect.y0() + 6, unionRect.y0());
-      int endY = Math.min(rect.y1() - 6, unionRect.y1());
+      int startY = unionRect.y0();
+      int endY = unionRect.y1();
       for (int y = startY; y < endY; y += 1) {
         int dark = 0;
         for (int x = rect.x0() + 4; x < rect.x1() - 4; x += 3) {
@@ -715,7 +720,7 @@ public class Id988aTemplateExtractor {
       rawBands.add(new int[] {bandStart, density.length});
     }
 
-    List<int[]> mergedBands = mergeRowBands(rawBands, 38, 8);
+    List<int[]> mergedBands = mergeRowBands(rawBands, 38, 3);
     if (mergedBands.isEmpty()) {
       return List.of();
     }
@@ -724,12 +729,12 @@ public class Id988aTemplateExtractor {
         .collect(Collectors.toMap(Id988aTemplateField::normalizedKey, ignored -> ""));
     List<WorkingExperienceRow> rows = new ArrayList<>();
     for (int[] band : mergedBands) {
-      double startRatio = Math.max(0.0, (double) Math.max(0, band[0] - 10) / unionRect.height());
-      double endRatio = Math.min(1.0, (double) Math.min(unionRect.height(), band[1] + 10) / unionRect.height());
-      if (endRatio - startRatio < 0.04) {
+      double startRatio = Math.max(0.0, (double) Math.max(0, unionRect.y0() + band[0] - 10) / page.imageHeight());
+      double endRatio = Math.min(1.0, (double) Math.min(page.imageHeight(), unionRect.y0() + band[1] + 10) / page.imageHeight());
+      if (endRatio - startRatio < 0.01) {
         continue;
       }
-      rows.add(new WorkingExperienceRow(Map.copyOf(emptyValues), startRatio, endRatio));
+      rows.add(new WorkingExperienceRow(Map.copyOf(emptyValues), startRatio, endRatio, true));
     }
     return List.copyOf(rows);
   }
@@ -1171,9 +1176,9 @@ public class Id988aTemplateExtractor {
       List<String> qualityReasons
   ) {}
 
-  private record WorkingExperienceRow(Map<String, String> values, Double startRatio, Double endRatio) {
+  private record WorkingExperienceRow(Map<String, String> values, Double startRatio, Double endRatio, boolean absolutePageY) {
     WorkingExperienceRow(Map<String, String> values) {
-      this(values, null, null);
+      this(values, null, null, false);
     }
 
     String value(String normalizedKey) {
@@ -1182,6 +1187,9 @@ public class Id988aTemplateExtractor {
 
     TemplateRect slice(TemplateRect rect, int rowIndex, int rowCount) {
       if (startRatio != null && endRatio != null && endRatio > startRatio) {
+        if (absolutePageY) {
+          return new TemplateRect(rect.x(), startRatio, rect.width(), endRatio - startRatio);
+        }
         double y = rect.y() + rect.height() * startRatio;
         double height = rect.height() * (endRatio - startRatio);
         return new TemplateRect(rect.x(), y, rect.width(), height);

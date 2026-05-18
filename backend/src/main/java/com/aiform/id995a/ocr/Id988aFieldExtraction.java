@@ -20,5 +20,7 @@ public record Id988aFieldExtraction(
     List<Integer> valueBbox,
     String extractionSource,
     String qualityStatus,
-    List<String> qualityReasons
+    List<String> qualityReasons,
+    String roiImageDataUrl,
+    boolean needsHumanReview
 ) {}

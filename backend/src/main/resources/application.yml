@@ -16,6 +16,7 @@ ocr:
   field-service:
     base-url: ${FIELD_OCR_BASE_URL:http://127.0.0.1:8091}
     timeout-seconds: ${FIELD_OCR_TIMEOUT_SECONDS:300}
+    render-dpi: ${FIELD_OCR_RENDER_DPI:300}
   tesseract:
     enabled: ${OCR_ENABLED:true}
     language: ${OCR_LANGUAGE:eng+chi_sim+chi_tra}

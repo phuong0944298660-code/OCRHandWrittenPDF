@@ -508,7 +508,7 @@ svg {
 
 .field-row {
   display: grid;
-  grid-template-columns: minmax(180px, 1.15fr) minmax(180px, 1fr) 56px;
+  grid-template-columns: minmax(170px, 1.1fr) 132px minmax(180px, 1fr) 70px;
   gap: 12px;
   align-items: center;
   min-height: 58px;
@@ -531,6 +531,29 @@ svg {
   gap: 4px;
 }
 
+.field-roi {
+  width: 132px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #cfd8e3;
+  border-radius: 6px;
+  background: #f8fafc;
+  overflow: hidden;
+}
+
+.field-roi img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.field-roi span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
 .field-label strong,
 .field-value strong {
   overflow-wrap: anywhere;
@@ -543,6 +566,20 @@ svg {
   font-size: 12px;
   line-height: 1.35;
   overflow-wrap: anywhere;
+}
+
+.field-value .review-state {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: #eef7f8;
+  color: var(--teal);
+  font-weight: 800;
+}
+
+.field-value .review-state-warning {
+  background: var(--amber-soft);
+  color: #8a4b00;
 }
 
 .field-value strong {
@@ -694,6 +731,11 @@ svg {
 
   .field-row {
     grid-template-columns: 1fr;
+  }
+
+  .field-roi {
+    width: 100%;
+    height: 64px;
   }
 
   .field-confidence {

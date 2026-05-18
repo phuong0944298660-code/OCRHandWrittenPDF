@@ -14,7 +14,8 @@ public class OcrFieldQualityGate {
   private static final Pattern KANA_OR_HANGUL = Pattern.compile("[\\u3040-\\u30ff\\uac00-\\ud7af]");
   private static final Pattern CJK = Pattern.compile("[\\u3400-\\u9fff]");
   private static final Pattern LATIN_OR_DIGIT = Pattern.compile("[A-Za-z0-9]");
-  private static final Pattern SYMBOL_NOISE = Pattern.compile("[{}<>|`^~\\\\]");
+  private static final Pattern SYMBOL_NOISE = Pattern.compile("[{}<>`^~\\\\]");
+  private static final Pattern PIPE_SEPARATOR = Pattern.compile("\\|");
   private static final Pattern DIGIT = Pattern.compile("\\d");
   private static final Pattern UNSUPPORTED_SCRIPT = Pattern.compile(
       "[\\u0370-\\u03ff\\u0400-\\u052f\\u0590-\\u05ff\\u0600-\\u06ff\\u0750-\\u077f"
@@ -83,7 +84,8 @@ public class OcrFieldQualityGate {
     if (LOC_TOKEN.matcher(text).find() || REPLACEMENT_NOISE.matcher(text).find()) {
       reasons.add("locator_or_replacement_noise");
     }
-    if (SYMBOL_NOISE.matcher(text).find()) {
+    if (SYMBOL_NOISE.matcher(text).find()
+        || (PIPE_SEPARATOR.matcher(text).find() && !allowsPipeSeparator(field))) {
       reasons.add("symbol_noise");
     }
     if (hasForeignFieldLabels(field, text)) {
@@ -109,6 +111,9 @@ public class OcrFieldQualityGate {
     }
     if (isNarrowCellField(field) && text.length() > 90) {
       reasons.add("narrow_field_too_long");
+    }
+    if (confidence < 0.55) {
+      reasons.add("low_confidence");
     }
     if (confidence < 0.5 && text.length() > 40) {
       reasons.add("long_low_confidence_text");
@@ -211,6 +216,10 @@ public class OcrFieldQualityGate {
         || "date_cells".equals(field.fieldType())
         || "number_cells".equals(field.fieldType())
         || "repeatable_date_month".equals(field.fieldType());
+  }
+
+  private boolean allowsPipeSeparator(Id988aTemplateField field) {
+    return field.normalizedKey().startsWith("workingExperience.items[]");
   }
 
   private int digitCount(String text) {

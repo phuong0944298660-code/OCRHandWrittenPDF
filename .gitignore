@@ -59,10 +59,24 @@ desktop.ini
 # Vector cache (can be regenerated)
 rag-service/data/rule-vectors-bge-m3.json
 
+# Local OCR model artifacts (downloaded from Paddle model ecology)
+models/*
+!models/README.md
+.paddlex_cache/
+paddleocr-*/
+paddleocr-*.json
+paddleocr-*.txt
+
+# Codex/local debug artifacts
+.codex_tmp/
+.codex-tmp/
+
 # Uploaded PDFs / sensitive data (user uploads)
 uploads/
 temp/
 tmp/
+docs/5.12_full_tests/
+docs/outputs/hejiaxuan-a-test/
 
 # Allow official template PDFs (rule sources)
 !official_templates/**/*.pdf
