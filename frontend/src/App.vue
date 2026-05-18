@@ -91,8 +91,8 @@ function startProgress() {
     progress.value = Math.min(next, 98)
 
     if (progress.value < 20) progressStage.value = '上传文件'
-    else if (progress.value < 48) progressStage.value = 'PaddleOCR-VL 解析版面'
-    else if (progress.value < 76) progressStage.value = '识别中英文与手写内容'
+    else if (progress.value < 48) progressStage.value = 'PDF 渲染与字段裁剪'
+    else if (progress.value < 76) progressStage.value = 'PP-OCRv5 识别字段内容'
     else progressStage.value = '整理分页结果'
   }, 160)
 }
@@ -125,7 +125,7 @@ async function submitOcr() {
     resultTab.value = response.value?.extractedFields?.length ? 'fields' : 'text'
     stopProgress(true)
   } catch (exception) {
-    error.value = `OCR 识别未完成：${exception.message || '请确认后端与 PaddleOCR-VL 服务已启动'}`
+    error.value = `OCR 识别未完成：${exception.message || '请确认后端、Python OCR 服务与 PP-OCRv5 模型已启动'}`
     stopProgress(false)
   } finally {
     loading.value = false
@@ -179,7 +179,7 @@ function summarizeDataUrl(value) {
       </div>
       <div class="model-pill">
         <span>解析模型</span>
-        <strong>PaddleOCR-VL</strong>
+        <strong>PP-OCRv5 det/rec</strong>
       </div>
     </header>
 
@@ -269,7 +269,7 @@ function summarizeDataUrl(value) {
           </div>
           <div class="document-canvas">
             <img v-if="currentPage?.sourceImageDataUrl" :src="currentPage.sourceImageDataUrl" alt="源文件页面快照" />
-            <div v-else class="empty-panel">PaddleOCR 未返回该页快照</div>
+            <div v-else class="empty-panel">Python OCR 服务未返回该页快照</div>
           </div>
         </section>
 
